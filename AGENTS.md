@@ -122,10 +122,12 @@ answer — "never established" — and every call finalized before 2026-08-25
 carries `null` on both. Branch on these two, not on the string below.
 **`outcome_type` is deprecated** — one string answering three unrelated
 questions, kept with no removal date as a correlation aid for log searches and
-`outcome_type=` filters. All seventeen, verbatim:
+`outcome_type=` filters. All nineteen, verbatim:
 `success_booked|success_refused|success_no_booking|success_booking_cancelled` ·
 `failed_short_hangup` (most common failure — picked up, hung up early) ·
 `failed_voicemail|failed_no_answer|failed_busy|failed_no_agent_available|failed_no_disclosure|failed_technical` ·
+`failed_ivr_no_agent` (a phone menu answered, no person reachable) ·
+`failed_recorded_announcement` (a recording answered — no menu, no mailbox) ·
 `failed_call_dropped` (line died after real dialogue) · `failed_wrong_number`
 (answered, not the business you asked for) · `failed_cancelled` (you cancelled
 the call — not the same as `success_booking_cancelled`, where the venue

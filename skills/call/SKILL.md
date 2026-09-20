@@ -544,7 +544,7 @@ spoke on. **Branch on `result` + `ended_by`.** Keep `outcome_type` for
 correlating with an older log line or an `outcome_type=` filter — which is why
 the values below are spelled exactly as the API returns them.
 
-There is **no removal date**, and all seventeen values are live:
+There is **no removal date**, and all nineteen values are live:
 
 - `success_booked` — the reservation was confirmed.
 - `success_refused` — a real conversation, and the venue said no (closed, full,
@@ -559,6 +559,11 @@ There is **no removal date**, and all seventeen values are live:
 - `failed_voicemail`, `failed_no_answer`, `failed_busy` — nobody reached.
 - `failed_no_agent_available` — a hold queue played past the hold budget and no
   human ever picked up.
+- `failed_ivr_no_agent` — an automated phone menu answered and no person could
+  be reached on any option we could take. Nobody reached; not charged.
+- `failed_recorded_announcement` — a recording answered (an announcement or an
+  advert with no menu and no mailbox), so nobody could be reached and no
+  message could be left. Not charged.
 - `failed_no_disclosure` — the mandatory recording notice couldn't be
   delivered (or the callee hung up during it), so the call ended early.
 - `failed_technical` — carrier or system error.
