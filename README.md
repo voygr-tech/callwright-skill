@@ -116,34 +116,37 @@ in the next section. `chmod 600 ~/.claude/settings.json` if you want the file
 permissions to match.
 
 ### claude.ai chat
-Works on every plan via a **custom connector**. Same setup everywhere; only the
-key's hiding place differs.
+Works on every plan via a **custom connector** with sign-in. No key to copy.
 
-| Your plan | Who adds it | Where the key goes |
-|---|---|---|
-| **Pro / Max** | You | Request header |
-| **Team / Enterprise** | A workspace Owner, once for everyone | Request header |
-| **Free** | You | Inside the URL |
+**Setup.** Personal plans: **Settings** > **Connectors** > **Add custom connector**.
+Team/Enterprise: an Owner adds it once under **Organization settings** >
+**Connectors**, and each member then signs in with their own PlaceCall account.
 
-**Setup.** Personal plans: **Settings** > **Connectors** > **Add**.
-Team/Enterprise Owners: **Organization Settings** > **Connectors** > **Add** >
-**Custom**.
+1. Name it `PlaceCall`, URL `https://api.voygr.tech/mcp`. Keep the sign-in
+   setting Claude detects.
+2. **Add**, then sign in with Google or email. On first sign-in you accept the
+   Terms of Service and Privacy Policy, and a PlaceCall account is created with
+   free credits.
+3. Allow access. PlaceCall appears in a chat's tools menu, where it can find
+   places worth calling, place a call (it always confirms first), and fetch the
+   result.
 
-1. Name it `PlaceCall`, URL `https://api.voygr.tech/mcp`
-   *Free plan:* `https://api.voygr.tech/mcp?key=<your key>`
-2. Choose **No sign-in**, then add a Request header `x-api-key` with your key
-   *Free plan:* skip this, the key is already in the URL
-3. **Add**, then **Connect**. PlaceCall appears in a chat's tools menu, where it
-   can find places worth calling, place a call (it always confirms first), and
-   fetch the result.
+Prefer one API key for a whole workspace? Add the connector with **No sign-in**
+and a Request header `x-api-key` carrying your key. All calls then bill to that
+key.
 
-**Two things worth knowing.** On Free, treat the connector URL like the key
-itself, since anyone who copies it can spend your credits (our server strips it
-from the URL on arrival, so it never reaches a log). On Team/Enterprise, one key
-serves everyone, so all calls bill to it.
+### ChatGPT
+Add PlaceCall as a custom app in ChatGPT on the web. Custom apps depend on your
+ChatGPT plan.
 
-> **ChatGPT**: not yet. Its connectors require OAuth sign-in, which we are
-> building.
+1. Open **Plugins**, then **+** > **Create plugin** > **Create MCP App**.
+2. Name it `PlaceCall`, server URL `https://api.voygr.tech/mcp`,
+   authentication **OAuth**. Leave the OAuth settings ChatGPT discovers as they
+   are, accept the custom-app notice, and **Create**.
+3. Sign in with Google or email. On first sign-in you accept the Terms of
+   Service and Privacy Policy, and a PlaceCall account is created with free
+   credits.
+4. In a chat, pick PlaceCall from the tools menu.
 
 ### Any MCP client (Cursor, Windsurf, MCP Inspector, ...)
 Point the client at `https://api.voygr.tech/mcp` (streamable HTTP transport)
