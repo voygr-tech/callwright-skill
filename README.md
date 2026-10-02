@@ -228,6 +228,21 @@ any non-loopback host is a critical finding by that scanner's design, which is
 what our skill does on every call. MCP has no shell and no env var in the
 request, so the rule does not apply. The trailing slash on the URL matters.
 
+### Gemini CLI
+This repo is also a Gemini CLI extension: the skill plus the PlaceCall MCP
+server. Install it from your shell:
+
+```sh
+gemini extensions install https://github.com/voygr-tech/placecall
+```
+
+The install asks for your PlaceCall API key and keeps it in the system keychain
+(change it later with `gemini extensions config placecall`). Gemini hands that
+stored key to the MCP server only. The skill's `curl` commands run in your
+shell and read `PLACECALL_API_KEY` from there, so export it as well (see
+[Get a key](#get-a-key-self-serve-and-set-it)). If the key is exported but not
+stored, the MCP server picks it up from your environment too.
+
 ### Any agent / plain shell
 No install needed - the API is just HTTP. `skills/placecall/SKILL.md` is the full
 reference; a model with a shell tool can place calls straight from it.
@@ -377,8 +392,9 @@ set; only the name is sent, never a variable's value).
 
 The only local file the skill reads is `~/.codex/placecall.env`, your saved
 key, and only when `PLACECALL_API_KEY` is unset. `install.sh` makes no network
-calls. The checkout, recovery and docs links in this README are pages for you
-to open; the skill does not fetch them.
+calls. The Gemini CLI extension also connects to the PlaceCall MCP server at
+`https://api.voygr.tech/mcp`, the same host. The checkout, recovery and docs
+links in this README are pages for you to open; the skill does not fetch them.
 
 On our side, a call rings a real phone and is recorded. Recordings and
 transcripts are kept for 90 days. Security reports: [SECURITY.md](./SECURITY.md).

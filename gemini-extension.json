@@ -1,0 +1,21 @@
+{
+  "name": "placecall",
+  "version": "6.0.1",
+  "description": "PlaceCall makes AI phone calls that book, confirm, and reach any business. One REST API places a real outbound call and returns a structured outcome plus a full transcript. Free API key at https://api.voygr.tech/checkout",
+  "settings": [
+    {
+      "name": "PlaceCall API key",
+      "description": "Your PlaceCall API key, free at https://api.voygr.tech/checkout. Kept in the system keychain and sent only to api.voygr.tech.",
+      "envVar": "PLACECALL_API_KEY",
+      "sensitive": true
+    }
+  ],
+  "mcpServers": {
+    "placecall": {
+      "httpUrl": "https://api.voygr.tech/mcp",
+      "headers": {
+        "X-API-Key": "${PLACECALL_API_KEY}"
+      }
+    }
+  }
+}
