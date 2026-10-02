@@ -67,16 +67,16 @@ Two commands, no shell, no git - and it **auto-updates** from this repo:
 ```
 Claude Code asks where to install it - choose **user scope** ("Install for you")
 unless you specifically want it confined to one repository. The skill then answers
-to `/placecall:call`, and Claude reaches for it on its own whenever you ask to
-call someone.
+to `/placecall:placecall` (or just `/placecall`), and Claude reaches for it on its
+own whenever you ask to call someone.
 
 ### Claude Code, without the plugin
 ```sh
 git clone https://github.com/voygr-tech/placecall && cd placecall
-./install.sh     # copies skills/call/SKILL.md -> ~/.claude/skills/placecall/
+./install.sh     # copies skills/placecall/SKILL.md -> ~/.claude/skills/placecall/
 ```
 `install.sh` is a tiny convenience script - it **only** copies
-`skills/call/SKILL.md` into your skills dir (no network, no other side
+`skills/placecall/SKILL.md` into your skills dir (no network, no other side
 effects); you can also copy it by hand. Then start a **fresh** Claude Code session
 (skills load at startup). Note that a copy never updates itself - if you want new
 skills and fixes as we ship them, prefer the plugin above.
@@ -174,7 +174,7 @@ not just the three tools.
 skill bundled with Codex, so there is nothing to set up first:
 
 ```
-$skill-installer install the skill at https://github.com/voygr-tech/placecall/tree/main/skills/call and name it placecall
+$skill-installer install the skill at https://github.com/voygr-tech/placecall/tree/main/skills/placecall and name it placecall
 ```
 
 It is a skill rather than a command, so plain English works and is what it
@@ -187,7 +187,7 @@ run it yourself from a normal shell:
 
 ```sh
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --url https://github.com/voygr-tech/placecall/tree/main/skills/call \
+  --url https://github.com/voygr-tech/placecall/tree/main/skills/placecall \
   --name placecall
 ```
 
@@ -195,6 +195,12 @@ Two things worth knowing. The installer refuses to overwrite, so if you already
 have a `placecall` (or older `callwright`) skill in `~/.codex/skills`, delete it
 first or the install aborts. And **don't** run `install.sh` on Codex, that is the
 Claude Code path.
+
+The skill folder moved from `skills/call` to `skills/placecall` in October 2026,
+so an install line that still says `.../tree/main/skills/call` no longer finds
+it. A copy you already installed keeps working and still answers to
+`$placecall`. To pick up newer versions, delete it and reinstall from the
+`skills/placecall` URL above.
 
 On older Codex without `$skill-installer`, or as an alternative on any Codex,
 paste this repo's [`AGENTS.md`](./AGENTS.md) into your project's `AGENTS.md`.
@@ -221,7 +227,7 @@ what our skill does on every call. MCP has no shell and no env var in the
 request, so the rule does not apply. The trailing slash on the URL matters.
 
 ### Any agent / plain shell
-No install needed - the API is just HTTP. `skills/call/SKILL.md` is the full
+No install needed - the API is just HTTP. `skills/placecall/SKILL.md` is the full
 reference; a model with a shell tool can place calls straight from it.
 
 No shell on your side? Assistants with their own computer (e.g. **Meta Muse**)
@@ -342,6 +348,6 @@ how to wrap up). One endpoint, describe the task, done.
   US destinations only; every call opens by identifying PlaceCall and stating
   that the line is recorded.
 
-**Full reference:** [`skills/call/SKILL.md`](./skills/call/SKILL.md) (Claude Code) · [`AGENTS.md`](./AGENTS.md) (Codex).
+**Full reference:** [`skills/placecall/SKILL.md`](./skills/placecall/SKILL.md) (Claude Code) · [`AGENTS.md`](./AGENTS.md) (Codex).
 
 **Live API docs:** <https://api.voygr.tech/docs> - log in with your PlaceCall key (the same one you set as `PLACECALL_API_KEY`).
