@@ -149,8 +149,10 @@ ChatGPT plan.
 4. In a chat, pick PlaceCall from the tools menu.
 
 ### Any MCP client (Cursor, Windsurf, MCP Inspector, ...)
-Point the client at `https://api.voygr.tech/mcp` (streamable HTTP transport)
-and send your key on every request - either header works:
+Point the client at `https://api.voygr.tech/mcp` (streamable HTTP transport).
+It is listed in the official MCP Registry as `io.github.voygr-tech/placecall`.
+Sign in with OAuth where your client supports it, or send your key on every
+request - either header works:
 
 ```
 X-API-Key: <your key>
@@ -347,6 +349,39 @@ how to wrap up). One endpoint, describe the task, done.
 - Only call numbers you're authorized to - real calls ring real phones.
   US destinations only; every call opens by identifying PlaceCall and stating
   that the line is recorded.
+
+## Network access
+The skill contains no code. It is instructions your agent follows with its own
+shell, using `curl`, and every request goes over HTTPS to one host:
+`api.voygr.tech`. Nothing is sent anywhere else.
+
+- **Calls:** `POST /calls` sends the number to dial, your brief and the
+  language. `GET /calls`, `GET /calls/{id}`, `GET /calls/{id}/events` (polled
+  while a call runs), `POST /calls/{id}/answer` (your reply to a question the
+  call agent asks mid-call), `POST /calls/{id}/cancel`,
+  `GET /calls/{id}/transcript-merged` and `GET /calls/{id}/recording` follow
+  and read it.
+- **Finding a place to call:** `POST /v1/places/suggest` sends your request in
+  plain words, plus the name and callback number when you give them.
+- **Account:** `GET /users/me`, `GET /v1/usage`, `GET /checkout/packs`,
+  `GET /skills/{id}/manifest` and `PUT /users/me/limits`.
+
+Every request carries your key in the `X-API-Key` header, so
+`PLACECALL_API_KEY` goes to `api.voygr.tech` and nowhere else. `POST /calls`
+also sends three headers that never affect auth or billing: an
+`Idempotency-Key` so a retry cannot dial twice, `X-Client-Surface` naming the
+listing these instructions came from, and `X-Client-Agent` naming the tool that
+placed the call (`claude-code`, `cursor`, `codex` or `gemini-cli`, worked out
+from which of `CLAUDECODE`, `CURSOR_AGENT`, `CODEX_SANDBOX` and `GEMINI_CLI` is
+set; only the name is sent, never a variable's value).
+
+The only local file the skill reads is `~/.codex/placecall.env`, your saved
+key, and only when `PLACECALL_API_KEY` is unset. `install.sh` makes no network
+calls. The checkout, recovery and docs links in this README are pages for you
+to open; the skill does not fetch them.
+
+On our side, a call rings a real phone and is recorded. Recordings and
+transcripts are kept for 90 days. Security reports: [SECURITY.md](./SECURITY.md).
 
 **Full reference:** [`skills/placecall/SKILL.md`](./skills/placecall/SKILL.md) (Claude Code) · [`AGENTS.md`](./AGENTS.md) (Codex).
 
