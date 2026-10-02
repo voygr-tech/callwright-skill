@@ -18,6 +18,7 @@
     "reservations",
     "appointments"
   ],
+  "icon": "./assets/icon.png",
   "skills": [
     "./skills/placecall"
   ]

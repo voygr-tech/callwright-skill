@@ -14,8 +14,8 @@ an `AGENTS.md` reference, plugin and extension manifests, and `install.sh`,
 which copies one file and makes no network calls. Nothing here runs on its own.
 
 When an agent follows the skill, it sends HTTPS requests with `curl` to one
-host, **`api.voygr.tech`**, and nowhere else. The Gemini CLI extension also
-connects to the PlaceCall MCP server on that same host
+host, **`api.voygr.tech`**, and nowhere else. The Cursor plugin and the Gemini
+CLI extension also connect to the PlaceCall MCP server on that same host
 (`https://api.voygr.tech/mcp`). Your `PLACECALL_API_KEY` is sent only to
 `api.voygr.tech`, in the `X-API-Key` header. The README's
 [Network access](./README.md#network-access) section lists every endpoint and

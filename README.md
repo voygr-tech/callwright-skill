@@ -243,6 +243,21 @@ shell and read `PLACECALL_API_KEY` from there, so export it as well (see
 [Get a key](#get-a-key-self-serve-and-set-it)). If the key is exported but not
 stored, the MCP server picks it up from your environment too.
 
+### Cursor
+This repo is also a Cursor plugin (`.cursor-plugin/plugin.json`): the skill
+plus the PlaceCall MCP server at `https://api.voygr.tech/mcp`, which signs you
+in with OAuth, so the plugin holds no key. To load it before it is in the
+Cursor Marketplace, clone it into Cursor's local plugins folder and run
+**Developer: Reload Window**:
+
+```sh
+git clone https://github.com/voygr-tech/placecall ~/.cursor/plugins/local/placecall
+```
+
+The skill's `curl` commands read `PLACECALL_API_KEY` from the environment
+Cursor's agent runs in. To send a key to the MCP server instead of signing in,
+see [Any MCP client](#any-mcp-client-cursor-windsurf-mcp-inspector-).
+
 ### Any agent / plain shell
 No install needed - the API is just HTTP. `skills/placecall/SKILL.md` is the full
 reference; a model with a shell tool can place calls straight from it.
@@ -392,8 +407,8 @@ set; only the name is sent, never a variable's value).
 
 The only local file the skill reads is `~/.codex/placecall.env`, your saved
 key, and only when `PLACECALL_API_KEY` is unset. `install.sh` makes no network
-calls. The Gemini CLI extension also connects to the PlaceCall MCP server at
-`https://api.voygr.tech/mcp`, the same host. The checkout, recovery and docs
+calls. The Cursor plugin and the Gemini CLI extension also connect to the
+PlaceCall MCP server at `https://api.voygr.tech/mcp`, the same host. The checkout, recovery and docs
 links in this README are pages for you to open; the skill does not fetch them.
 
 On our side, a call rings a real phone and is recorded. Recordings and
