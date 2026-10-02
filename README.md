@@ -234,6 +234,23 @@ the MCP route above rather than the skill. If you are an agent building this
 integration, send `X-Client-Surface: <your-platform>` on every request so we
 can see which surfaces need love.
 
+### Apify Store (no code, a whole list)
+Have a list of businesses rather than an agent? [PlaceCall on the Apify Store](https://apify.com/voygr/placecall)
+calls every business on it, asks the questions you set, and returns one row per
+call. No PlaceCall key: Apify runs it and bills it.
+
+1. Open the Actor and press **Try for free** (you need an Apify account).
+2. Bring the list: upload a CSV, link a Google Sheet, paste rows, or use another
+   Actor's dataset, for example Google Maps results.
+3. Type your questions, keep **Check my list, don't call** ticked and press
+   **Start**. You see exactly what each business would be asked, for free.
+4. Accept the PlaceCall terms, untick the check and start again.
+
+$0.10 for each call that reaches a real conversation; unanswered calls, voicemail
+and busy lines are free. The first 10 calls on each Apify account are free, then
+a paid Apify plan is needed. Agents connected to the
+[Apify MCP server](https://mcp.apify.com) can find and run it too.
+
 ## Get a key (self-serve) and set it
 Installing the skill does **not** need a key; **placing calls does.** Keys are
 **self-serve** - no need to contact anyone:
