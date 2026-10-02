@@ -67,7 +67,7 @@ Two commands, no shell, no git - and it **auto-updates** from this repo:
 ```
 Claude Code asks where to install it - choose **user scope** ("Install for you")
 unless you specifically want it confined to one repository. The skill then answers
-to `/placecall:placecall` (or just `/placecall`), and Claude reaches for it on its
+to `/placecall:placecall`, and Claude reaches for it on its
 own whenever you ask to call someone.
 
 ### Claude Code, without the plugin
