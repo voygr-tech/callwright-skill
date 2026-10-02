@@ -1,0 +1,6 @@
+# OS metadata. The Claude plugin directory refuses a plugin folder that
+# contains any of these, so keep them out of commits.
+.DS_Store
+Thumbs.db
+desktop.ini
+__MACOSX/

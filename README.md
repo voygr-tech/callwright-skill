@@ -67,16 +67,16 @@ Two commands, no shell, no git - and it **auto-updates** from this repo:
 ```
 Claude Code asks where to install it - choose **user scope** ("Install for you")
 unless you specifically want it confined to one repository. The skill then answers
-to `/placecall:call`, and Claude reaches for it on its own whenever you ask to
-call someone.
+to `/placecall:placecall`, and Claude reaches for it on its
+own whenever you ask to call someone.
 
 ### Claude Code, without the plugin
 ```sh
 git clone https://github.com/voygr-tech/placecall && cd placecall
-./install.sh     # copies skills/call/SKILL.md -> ~/.claude/skills/placecall/
+./install.sh     # copies skills/placecall/SKILL.md -> ~/.claude/skills/placecall/
 ```
 `install.sh` is a tiny convenience script - it **only** copies
-`skills/call/SKILL.md` into your skills dir (no network, no other side
+`skills/placecall/SKILL.md` into your skills dir (no network, no other side
 effects); you can also copy it by hand. Then start a **fresh** Claude Code session
 (skills load at startup). Note that a copy never updates itself - if you want new
 skills and fixes as we ship them, prefer the plugin above.
@@ -149,8 +149,10 @@ ChatGPT plan.
 4. In a chat, pick PlaceCall from the tools menu.
 
 ### Any MCP client (Cursor, Windsurf, MCP Inspector, ...)
-Point the client at `https://api.voygr.tech/mcp` (streamable HTTP transport)
-and send your key on every request - either header works:
+Point the client at `https://api.voygr.tech/mcp` (streamable HTTP transport).
+It is listed in the official MCP Registry as `io.github.voygr-tech/placecall`.
+Sign in with OAuth where your client supports it, or send your key on every
+request - either header works:
 
 ```
 X-API-Key: <your key>
@@ -174,7 +176,7 @@ not just the three tools.
 skill bundled with Codex, so there is nothing to set up first:
 
 ```
-$skill-installer install the skill at https://github.com/voygr-tech/placecall/tree/main/skills/call and name it placecall
+$skill-installer install the skill at https://github.com/voygr-tech/placecall/tree/main/skills/placecall and name it placecall
 ```
 
 It is a skill rather than a command, so plain English works and is what it
@@ -187,7 +189,7 @@ run it yourself from a normal shell:
 
 ```sh
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --url https://github.com/voygr-tech/placecall/tree/main/skills/call \
+  --url https://github.com/voygr-tech/placecall/tree/main/skills/placecall \
   --name placecall
 ```
 
@@ -195,6 +197,12 @@ Two things worth knowing. The installer refuses to overwrite, so if you already
 have a `placecall` (or older `callwright`) skill in `~/.codex/skills`, delete it
 first or the install aborts. And **don't** run `install.sh` on Codex, that is the
 Claude Code path.
+
+The skill folder moved from `skills/call` to `skills/placecall` in October 2026,
+so an install line that still says `.../tree/main/skills/call` no longer finds
+it. A copy you already installed keeps working and still answers to
+`$placecall`. To pick up newer versions, delete it and reinstall from the
+`skills/placecall` URL above.
 
 On older Codex without `$skill-installer`, or as an alternative on any Codex,
 paste this repo's [`AGENTS.md`](./AGENTS.md) into your project's `AGENTS.md`.
@@ -220,8 +228,38 @@ any non-loopback host is a critical finding by that scanner's design, which is
 what our skill does on every call. MCP has no shell and no env var in the
 request, so the rule does not apply. The trailing slash on the URL matters.
 
+### Gemini CLI
+This repo is also a Gemini CLI extension: the skill plus the PlaceCall MCP
+server. Install it from your shell:
+
+```sh
+gemini extensions install https://github.com/voygr-tech/placecall
+```
+
+The install asks for your PlaceCall API key and keeps it in the system keychain
+(change it later with `gemini extensions config placecall`). Gemini hands that
+stored key to the MCP server only. The skill's `curl` commands run in your
+shell and read `PLACECALL_API_KEY` from there, so export it as well (see
+[Get a key](#get-a-key-self-serve-and-set-it)). If the key is exported but not
+stored, the MCP server picks it up from your environment too.
+
+### Cursor
+This repo is also a Cursor plugin (`.cursor-plugin/plugin.json`): the skill
+plus the PlaceCall MCP server at `https://api.voygr.tech/mcp`, which signs you
+in with OAuth, so the plugin holds no key. To load it before it is in the
+Cursor Marketplace, clone it into Cursor's local plugins folder and run
+**Developer: Reload Window**:
+
+```sh
+git clone https://github.com/voygr-tech/placecall ~/.cursor/plugins/local/placecall
+```
+
+The skill's `curl` commands read `PLACECALL_API_KEY` from the environment
+Cursor's agent runs in. To send a key to the MCP server instead of signing in,
+see [Any MCP client](#any-mcp-client-cursor-windsurf-mcp-inspector-).
+
 ### Any agent / plain shell
-No install needed - the API is just HTTP. `skills/call/SKILL.md` is the full
+No install needed - the API is just HTTP. `skills/placecall/SKILL.md` is the full
 reference; a model with a shell tool can place calls straight from it.
 
 No shell on your side? Assistants with their own computer (e.g. **Meta Muse**)
@@ -342,6 +380,41 @@ how to wrap up). One endpoint, describe the task, done.
   US destinations only; every call opens by identifying PlaceCall and stating
   that the line is recorded.
 
-**Full reference:** [`skills/call/SKILL.md`](./skills/call/SKILL.md) (Claude Code) · [`AGENTS.md`](./AGENTS.md) (Codex).
+## Network access
+The skill ships nothing that runs on its own. It is instructions your agent
+follows with its own shell, using `curl`, and every request goes over HTTPS to
+one host: `api.voygr.tech`. Nothing is sent anywhere else.
+
+- **Calls:** `POST /calls` sends the number to dial, your brief and the
+  language. `GET /calls`, `GET /calls/{id}`, `GET /calls/{id}/events` (polled
+  while a call runs), `POST /calls/{id}/answer` (your reply to a question the
+  call agent asks mid-call), `POST /calls/{id}/cancel`,
+  `GET /calls/{id}/transcript-merged` and `GET /calls/{id}/recording` follow
+  and read it.
+- **Finding a place to call:** `POST /v1/places/suggest` sends your request in
+  plain words, plus the name and callback number when you give them.
+- **Account:** `GET /users/me`, `GET /v1/usage`, `GET /checkout/packs`,
+  `GET /skills/{id}/manifest` and `PUT /users/me/limits`.
+
+Every request carries your key in the `X-API-Key` header, so
+`PLACECALL_API_KEY` goes to `api.voygr.tech` and nowhere else. `POST /calls`
+also sends three headers that never affect auth or billing: an
+`Idempotency-Key` so a retry cannot dial twice, `X-Client-Surface` naming the
+listing these instructions came from, and `X-Client-Agent` naming the tool that
+placed the call (`claude-code`, `cursor`, `codex` or `gemini-cli`, worked out
+from which of `CLAUDECODE`, `CURSOR_AGENT`, `CODEX_SANDBOX` and `GEMINI_CLI` is
+set; only the name is sent, never a variable's value).
+
+The only local file the skill reads is `~/.codex/placecall.env`, your saved
+key, and only when `PLACECALL_API_KEY` is unset. `install.sh` makes no network
+calls. The Cursor plugin and the Gemini CLI extension also connect to the
+PlaceCall MCP server at `https://api.voygr.tech/mcp`, the same host. The
+checkout, recovery and docs links in this README are pages for you to open; the
+skill does not fetch them.
+
+On our side, a call rings a real phone and is recorded. Recordings and
+transcripts are kept for 90 days. Security reports: [SECURITY.md](./SECURITY.md).
+
+**Full reference:** [`skills/placecall/SKILL.md`](./skills/placecall/SKILL.md) (Claude Code) · [`AGENTS.md`](./AGENTS.md) (Codex).
 
 **Live API docs:** <https://api.voygr.tech/docs> - log in with your PlaceCall key (the same one you set as `PLACECALL_API_KEY`).
