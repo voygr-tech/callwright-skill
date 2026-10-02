@@ -381,9 +381,9 @@ how to wrap up). One endpoint, describe the task, done.
   that the line is recorded.
 
 ## Network access
-The skill contains no code. It is instructions your agent follows with its own
-shell, using `curl`, and every request goes over HTTPS to one host:
-`api.voygr.tech`. Nothing is sent anywhere else.
+The skill ships nothing that runs on its own. It is instructions your agent
+follows with its own shell, using `curl`, and every request goes over HTTPS to
+one host: `api.voygr.tech`. Nothing is sent anywhere else.
 
 - **Calls:** `POST /calls` sends the number to dial, your brief and the
   language. `GET /calls`, `GET /calls/{id}`, `GET /calls/{id}/events` (polled
@@ -408,8 +408,9 @@ set; only the name is sent, never a variable's value).
 The only local file the skill reads is `~/.codex/placecall.env`, your saved
 key, and only when `PLACECALL_API_KEY` is unset. `install.sh` makes no network
 calls. The Cursor plugin and the Gemini CLI extension also connect to the
-PlaceCall MCP server at `https://api.voygr.tech/mcp`, the same host. The checkout, recovery and docs
-links in this README are pages for you to open; the skill does not fetch them.
+PlaceCall MCP server at `https://api.voygr.tech/mcp`, the same host. The
+checkout, recovery and docs links in this README are pages for you to open; the
+skill does not fetch them.
 
 On our side, a call rings a real phone and is recorded. Recordings and
 transcripts are kept for 90 days. Security reports: [SECURITY.md](./SECURITY.md).
