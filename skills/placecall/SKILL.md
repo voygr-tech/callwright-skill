@@ -177,7 +177,12 @@ for you. Do NOT web-search for businesses; suggest is the discovery step.
 - **Auth:** EVERY request sends the header `X-API-Key`, value = **your PlaceCall
   key**. Store it in the env var `PLACECALL_API_KEY`; NEVER print or echo the
   value — reference it as `$PLACECALL_API_KEY` in shell commands.
-- **If `PLACECALL_API_KEY` is unset**, source `~/.codex/placecall.env` in the
+- **One VOYGR key for every VOYGR API.** The same account key also works for
+  VOYGR Prospecting, whose skill stores it as `VOYGR_API_KEY`. If
+  `PLACECALL_API_KEY` is unset but `VOYGR_API_KEY` is set, use it in the SAME
+  shell command as the request:
+  `export PLACECALL_API_KEY="$VOYGR_API_KEY" && curl ...`.
+- **If neither is set**, source `~/.codex/placecall.env` in the
   SAME shell command as the request: `. ~/.codex/placecall.env && curl ...`.
   An `export` in one command does NOT carry to the next, because each command
   runs in its own shell. If that file does not exist, tell the user to get a
