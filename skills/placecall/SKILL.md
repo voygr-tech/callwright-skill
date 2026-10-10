@@ -713,8 +713,8 @@ JSON `{"detail":{...}}` with the HTTP status: `401` invalid key · `402`
 out of credits (see [When credits run out](#when-credits-run-out) — never
 retry) · `403` tier/entitlement not permitted · `409`
 concurrent-call limit (body lists `active_call_ids` — cancel one or wait) ·
-`422` validation (see `error_code` inside `detail`) · `429` rate limit (free
-keys 10 req/s, 120 req/min; paid 10 req/s, 100 req/min) **or** daily call ceiling reached (distinguish by
+`422` validation (see `error_code` inside `detail`) · `429` rate limit (10
+req/s, 120 req/min on free and paid keys) **or** daily call ceiling reached (distinguish by
 `detail.error`; the ceiling counts calls *created* per UTC day, the limit
 depends on your tier, and it resets at UTC midnight, see `resets_at`) · `503`
 maintenance
