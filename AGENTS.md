@@ -169,7 +169,7 @@ they can top up at <https://api.voygr.tech/checkout?src=gh-repo> (key into
 page, not a page to open; don't start a purchase for them. Resume only after
 they confirm, and check `GET /v1/usage` first. Other errors: `403`
 tier/entitlement · `409` concurrency cap (cancel an `active_call_id` or wait;
-raise via `PUT /users/me/limits`) · `429` rate limit (10 r/s, 100 r/min) or
+raise via `PUT /users/me/limits`) · `429` rate limit (10 r/s, 120 r/min on free and paid keys) or
 daily call ceiling (calls created per UTC day) · `503` maintenance/transient.
 **A failed or timed-out `POST /calls` is not proof no call was placed.** After a
 `502`, `504`, timeout or a connection dropped once the request was sent, do not
